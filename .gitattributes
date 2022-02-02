@@ -1,0 +1,7 @@
+* text=auto
+*.adoc text
+*.bazel text
+*.bzl text
+*.java text
+BUILD text -linguist-detectable
+WORKSPACE text -linguist-detectable

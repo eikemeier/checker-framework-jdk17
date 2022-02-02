@@ -1,0 +1,256 @@
+= rules_docker Demonstration
+:Author:    Oliver Eikemeier
+:Email:     <eikemeier@fillmore-labs.com>
+:Date:      2022-02
+:Revision:  v0.1
+:toc: macro
+
+== Purpose
+
+Demonstrates issues of Checker Framework 3.21.2.
+
+== Preparations
+
+https://github.com/bazelbuild/bazelisk#installation[Install bazelisk].
+
+== Building
+
+[source,shell]
+bazel build --verbose_failures //:hello_world
+
+Fails with:
+
+```
+ERROR: [...]/checker-framework-jdk17/src/main/java/com/example/hello_world/BUILD:9:12: Building src/main/java/com/example/hello_world/hello_world.jar (2 source files) and running annotation processors (NullnessChecker) failed: (Exit 1)
+error: AsSuperVisitor: type is not an erased subtype of supertype.
+  type: Object
+  superType: Greeting
+  ; The Checker Framework crashed.  Please report the crash.
+  Compilation unit: src/main/java/com/example/hello_world/Greeting.java
+  Last visited tree at line 21 column 12:
+          || o instanceof Greeting that
+  Exception: java.lang.Throwable; java.lang.Throwable
+  	at org.checkerframework.javacutil.BugInCF.<init>(BugInCF.java:34)
+  	at org.checkerframework.framework.type.AsSuperVisitor.errorTypeNotErasedSubtypeOfSuperType(AsSuperVisitor.java:145)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visitDeclared_Declared(AsSuperVisitor.java:333)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visitDeclared_Declared(AsSuperVisitor.java:29)
+  	at org.checkerframework.framework.util.AtmCombo.accept(AtmCombo.java:311)
+  	at org.checkerframework.framework.type.visitor.AbstractAtmComboVisitor.visit(AbstractAtmComboVisitor.java:65)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visit(AsSuperVisitor.java:98)
+  	at org.checkerframework.framework.type.AsSuperVisitor.asSuper(AsSuperVisitor.java:80)
+  	at org.checkerframework.framework.util.AnnotatedTypes.asSuper(AnnotatedTypes.java:113)
+  	at org.checkerframework.framework.util.AnnotatedTypes.castedAsSuper(AnnotatedTypes.java:141)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitTypeArgs(DefaultTypeHierarchy.java:476)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitDeclared_Declared(DefaultTypeHierarchy.java:448)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitDeclared_Declared(DefaultTypeHierarchy.java:45)
+  	at org.checkerframework.framework.util.AtmCombo.accept(AtmCombo.java:311)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.isSubtype(DefaultTypeHierarchy.java:155)
+  	at org.checkerframework.checker.nullness.KeyForAnnotatedTypeFactory$KeyForTypeHierarchy.isSubtype(KeyForAnnotatedTypeFactory.java:152)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.isSubtype(DefaultTypeHierarchy.java:131)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitInstanceOf(BaseTypeVisitor.java:2395)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitInstanceOf(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCInstanceOf.accept(JCTree.java:2230)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBinary(TreeScanner.java:721)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2166)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBinary(TreeScanner.java:722)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2166)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitReturn(TreeScanner.java:544)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitReturn(BaseTypeVisitor.java:2025)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitReturn(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCReturn.accept(JCTree.java:1717)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scan(TreeScanner.java:111)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBlock(TreeScanner.java:272)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBlock.accept(JCTree.java:1103)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitMethod(TreeScanner.java:224)
+  	at org.checkerframework.framework.source.SourceVisitor.visitMethod(SourceVisitor.java:106)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitMethod(BaseTypeVisitor.java:955)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitMethod(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodDecl.accept(JCTree.java:953)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scan(TreeScanner.java:111)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:119)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitClass(TreeScanner.java:203)
+  	at org.checkerframework.framework.source.SourceVisitor.visitClass(SourceVisitor.java:94)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.processClassTree(BaseTypeVisitor.java:539)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitClass(BaseTypeVisitor.java:485)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitClass(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCClassDecl.accept(JCTree.java:860)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:60)
+  	at org.checkerframework.framework.source.SourceVisitor.visit(SourceVisitor.java:82)
+  	at org.checkerframework.framework.source.SourceChecker.typeProcess(SourceChecker.java:987)
+  	at org.checkerframework.common.basetype.BaseTypeChecker.typeProcess(BaseTypeChecker.java:542)
+  	at org.checkerframework.common.basetype.BaseTypeChecker.typeProcess(BaseTypeChecker.java:535)
+  	at org.checkerframework.javacutil.AbstractTypeProcessor$AttributionTaskListener.finished(AbstractTypeProcessor.java:188)
+  	at jdk.compiler/com.sun.tools.javac.api.ClientCodeWrapper$WrappedTaskListener.finished(ClientCodeWrapper.java:854)
+  	at jdk.compiler/com.sun.tools.javac.api.MultiTaskListener.finished(MultiTaskListener.java:132)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.flow(JavaCompiler.java:1394)
+  	at com.google.devtools.build.buildjar.javac.BlazeJavaCompiler.flow(BlazeJavaCompiler.java:102)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.flow(JavaCompiler.java:1341)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:933)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.lambda$doCall$0(JavacTaskImpl.java:104)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.invocationHelper(JavacTaskImpl.java:152)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.doCall(JavacTaskImpl.java:100)
+  	at com.google.devtools.build.buildjar.javac.BlazeJavacMain.compile(BlazeJavacMain.java:135)
+  	at com.google.devtools.build.buildjar.ReducedClasspathJavaLibraryBuilder.fallback(ReducedClasspathJavaLibraryBuilder.java:105)
+  	at com.google.devtools.build.buildjar.ReducedClasspathJavaLibraryBuilder.compileSources(ReducedClasspathJavaLibraryBuilder.java:67)
+  	at com.google.devtools.build.buildjar.SimpleJavaLibraryBuilder.compileJavaLibrary(SimpleJavaLibraryBuilder.java:110)
+  	at com.google.devtools.build.buildjar.SimpleJavaLibraryBuilder.run(SimpleJavaLibraryBuilder.java:118)
+  	at com.google.devtools.build.buildjar.BazelJavaBuilder.build(BazelJavaBuilder.java:101)
+  	at com.google.devtools.build.buildjar.BazelJavaBuilder.parseAndBuild(BazelJavaBuilder.java:81)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler$WorkRequestHandlerBuilder.lambda$new$0(WorkRequestHandler.java:259)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler$WorkRequestCallback.apply(WorkRequestHandler.java:225)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler.respondToRequest(WorkRequestHandler.java:382)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler.lambda$startResponseThread$1(WorkRequestHandler.java:357)
+  	at java.base/java.lang.Thread.run(Thread.java:833)
+error: AsSuperVisitor: type is not an erased subtype of supertype.
+  type: @Initialized @Nullable Object
+  superType: @Initialized @NonNull Greeting
+  ; The Checker Framework crashed.  Please report the crash.
+  Compilation unit: src/main/java/com/example/hello_world/Greeting.java
+  Last visited tree at line 21 column 12:
+          || o instanceof Greeting that
+  Exception: java.lang.Throwable; java.lang.Throwable
+  	at org.checkerframework.javacutil.BugInCF.<init>(BugInCF.java:34)
+  	at org.checkerframework.framework.type.AsSuperVisitor.errorTypeNotErasedSubtypeOfSuperType(AsSuperVisitor.java:145)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visitDeclared_Declared(AsSuperVisitor.java:333)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visitDeclared_Declared(AsSuperVisitor.java:29)
+  	at org.checkerframework.framework.util.AtmCombo.accept(AtmCombo.java:311)
+  	at org.checkerframework.framework.type.visitor.AbstractAtmComboVisitor.visit(AbstractAtmComboVisitor.java:65)
+  	at org.checkerframework.framework.type.AsSuperVisitor.visit(AsSuperVisitor.java:98)
+  	at org.checkerframework.framework.type.AsSuperVisitor.asSuper(AsSuperVisitor.java:80)
+  	at org.checkerframework.framework.util.AnnotatedTypes.asSuper(AnnotatedTypes.java:113)
+  	at org.checkerframework.framework.util.AnnotatedTypes.castedAsSuper(AnnotatedTypes.java:141)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitTypeArgs(DefaultTypeHierarchy.java:476)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitDeclared_Declared(DefaultTypeHierarchy.java:448)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.visitDeclared_Declared(DefaultTypeHierarchy.java:45)
+  	at org.checkerframework.framework.util.AtmCombo.accept(AtmCombo.java:311)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.isSubtype(DefaultTypeHierarchy.java:155)
+  	at org.checkerframework.framework.type.DefaultTypeHierarchy.isSubtype(DefaultTypeHierarchy.java:131)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitInstanceOf(BaseTypeVisitor.java:2395)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitInstanceOf(NullnessVisitor.java:417)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitInstanceOf(NullnessVisitor.java:68)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCInstanceOf.accept(JCTree.java:2230)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBinary(TreeScanner.java:721)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitBinary(NullnessVisitor.java:461)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitBinary(NullnessVisitor.java:68)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2166)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBinary(TreeScanner.java:722)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitBinary(NullnessVisitor.java:461)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitBinary(NullnessVisitor.java:68)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBinary.accept(JCTree.java:2166)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitReturn(TreeScanner.java:544)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitReturn(BaseTypeVisitor.java:2025)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitReturn(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCReturn.accept(JCTree.java:1717)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scan(TreeScanner.java:111)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitBlock(TreeScanner.java:272)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCBlock.accept(JCTree.java:1103)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitMethod(TreeScanner.java:224)
+  	at org.checkerframework.framework.source.SourceVisitor.visitMethod(SourceVisitor.java:106)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitMethod(BaseTypeVisitor.java:955)
+  	at org.checkerframework.checker.initialization.InitializationVisitor.visitMethod(InitializationVisitor.java:334)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitMethod(NullnessVisitor.java:512)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.visitMethod(NullnessVisitor.java:68)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCMethodDecl.accept(JCTree.java:953)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:86)
+  	at org.checkerframework.framework.source.SourceVisitor.scan(SourceVisitor.java:88)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:349)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.scan(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:96)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scan(TreeScanner.java:111)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.scanAndReduce(TreeScanner.java:119)
+  	at jdk.compiler/com.sun.source.util.TreeScanner.visitClass(TreeScanner.java:203)
+  	at org.checkerframework.framework.source.SourceVisitor.visitClass(SourceVisitor.java:94)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.processClassTree(BaseTypeVisitor.java:539)
+  	at org.checkerframework.checker.initialization.InitializationVisitor.processClassTree(InitializationVisitor.java:288)
+  	at org.checkerframework.checker.nullness.NullnessVisitor.processClassTree(NullnessVisitor.java:576)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitClass(BaseTypeVisitor.java:485)
+  	at org.checkerframework.common.basetype.BaseTypeVisitor.visitClass(BaseTypeVisitor.java:180)
+  	at jdk.compiler/com.sun.tools.javac.tree.JCTree$JCClassDecl.accept(JCTree.java:860)
+  	at jdk.compiler/com.sun.source.util.TreePathScanner.scan(TreePathScanner.java:60)
+  	at org.checkerframework.framework.source.SourceVisitor.visit(SourceVisitor.java:82)
+  	at org.checkerframework.framework.source.SourceChecker.typeProcess(SourceChecker.java:987)
+  	at org.checkerframework.common.basetype.BaseTypeChecker.typeProcess(BaseTypeChecker.java:542)
+  	at org.checkerframework.javacutil.AbstractTypeProcessor$AttributionTaskListener.finished(AbstractTypeProcessor.java:188)
+  	at jdk.compiler/com.sun.tools.javac.api.ClientCodeWrapper$WrappedTaskListener.finished(ClientCodeWrapper.java:854)
+  	at jdk.compiler/com.sun.tools.javac.api.MultiTaskListener.finished(MultiTaskListener.java:132)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.flow(JavaCompiler.java:1394)
+  	at com.google.devtools.build.buildjar.javac.BlazeJavaCompiler.flow(BlazeJavaCompiler.java:102)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.flow(JavaCompiler.java:1341)
+  	at jdk.compiler/com.sun.tools.javac.main.JavaCompiler.compile(JavaCompiler.java:933)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.lambda$doCall$0(JavacTaskImpl.java:104)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.invocationHelper(JavacTaskImpl.java:152)
+  	at jdk.compiler/com.sun.tools.javac.api.JavacTaskImpl.doCall(JavacTaskImpl.java:100)
+  	at com.google.devtools.build.buildjar.javac.BlazeJavacMain.compile(BlazeJavacMain.java:135)
+  	at com.google.devtools.build.buildjar.ReducedClasspathJavaLibraryBuilder.fallback(ReducedClasspathJavaLibraryBuilder.java:105)
+  	at com.google.devtools.build.buildjar.ReducedClasspathJavaLibraryBuilder.compileSources(ReducedClasspathJavaLibraryBuilder.java:67)
+  	at com.google.devtools.build.buildjar.SimpleJavaLibraryBuilder.compileJavaLibrary(SimpleJavaLibraryBuilder.java:110)
+  	at com.google.devtools.build.buildjar.SimpleJavaLibraryBuilder.run(SimpleJavaLibraryBuilder.java:118)
+  	at com.google.devtools.build.buildjar.BazelJavaBuilder.build(BazelJavaBuilder.java:101)
+  	at com.google.devtools.build.buildjar.BazelJavaBuilder.parseAndBuild(BazelJavaBuilder.java:81)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler$WorkRequestHandlerBuilder.lambda$new$0(WorkRequestHandler.java:259)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler$WorkRequestCallback.apply(WorkRequestHandler.java:225)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler.respondToRequest(WorkRequestHandler.java:382)
+  	at com.google.devtools.build.lib.worker.WorkRequestHandler.lambda$startResponseThread$1(WorkRequestHandler.java:357)
+  	at java.base/java.lang.Thread.run(Thread.java:833)
+```
+
+== Analysis
+
+There seems to be an issue with pattern matching for instanceof (`o instanceof Greeting that`). This
+is a regression, using version 3.21.1 we can compile (and run) the example:
+
+[source,shell]
+bazel run //:hello_world_old -- Bazel
+
+```
+Hello, Bazel!
+```
